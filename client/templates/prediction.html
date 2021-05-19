@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+</br>
+<div id="container">
+    <h1>การคาดการณ์</h1>
+    <p>ประเภทของหมี : {{ pred_result['predictions'][0]['label'] }}</p>
+    <p>ความเหมือน : {{ pred_result['predictions'][0]['confidence'] *100}} %</p>
+
+</div>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@400;700&display=swap');
+    
+    * {
+        font-family: 'Mitr', sans-serif;
+    }
+    
+    body {
+      background-image: url('static/images/c2.jpg');
+    }
+
+    #container {
+    margin: auto;
+    border-radius: 25px;
+    background: #73AD21;
+    padding: 20px; 
+    width: 750px;
+    height: 250px;    
+}
+</style>
+</body>
+
+</html>

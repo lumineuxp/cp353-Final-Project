@@ -1,0 +1,338 @@
+openapi: 3.0.0
+info:
+  title: Books API Service
+  version: 1.0.0
+tags:
+- name: "Books"
+  description: "Every things about books"
+
+   
+    
+paths:
+  
+  /book:
+    get:
+      tags:
+      - "Books"
+      summary: "Finds all books"
+      description: ""
+      operationId: "findBooks"
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/books'
+        '404':
+          $ref: '#/components/responses/404ApiError'
+          
+    post:
+      tags:
+      - "Books"
+      summary: "Add a new book"
+      description: ""
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                properties:
+                 author:
+                   type: string
+                   example: Ryousuke Takeuchi
+                 genre:
+                   type: string
+                   example: Mystery
+                 publisher:
+                   type: string
+                   example: Luckpim
+                 volumes:
+                   type: integer
+                   example: 14
+                 status:
+                   type: string
+                   description: "book's status"
+                   enum:
+                   - "ended"
+                   - "progress"
+                 title:
+                   type: string
+                   example: Moriarty the Patriot
+                 story:
+                   type: string
+                   example: "ศตวรรษที่ 19 ท่ามกลางการปฏิวัติอุตสาหกรรม             เป็นช่วงเวลาที่อังกฤษกำลังขยายอำนาจอย่างยิ่งใหญ่             ทว่าในเบื้องหลังของความก้าวหน้าทางเทคโนโลยีนั้น             ก็มีระบบลำดับชั้นอันเก่าแก่ที่ทำให้ขุนนางซึ่งมีจำนวนไม่ถึง 3             เปอร์เซ็นของประชากรทั้งหมดปกครองประเทศอยู่             เหล่าขุนนางที่ยึกครองสิทธิพิเศษราวกับเป็นเรื่องปกติ             และชนชั้นล่างที่ต้องหาเช้ากินค่ำ             ผู้คนนั้นไม่ว่าใครต่างก็ต้องใช้ชีวิตอยู่ภายในระบอบลำดับชั้นที่ถูกกำหนดตั้งแ            ต่ถือกำเนิดมา\r\nวิลเลี่ยม เจมส์ มอริอาร์ตี้             ได้เริ่มเคลื่อนไหวเพื่อที่จะทำลายระบอบชนชั้นพิเศษที่เน่าเฟะ            และสร้างประเทศในอุดมคติขึ้นมา มอริอาร์ตี้ “เจ้าแห่งอาชญากร”            ที่สามารถหลอกลวงได้แม้กระทั่งเชอร์ล็อคโฮม             กำลังจะเปลี่ยนโลกใบนี้ด้วยการปฏิวัติโดยอาชญากรรม"
+                 link:
+                   type: string
+                   example: "https://www.youtube.c/embed/9du5oHqrWwA"
+      responses:
+        '201':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/books'
+        '401':
+          description: "Unauthorized"
+        '405':
+          description: "Invalid input"
+          
+
+          
+  /book/{book_id}:
+    get:
+      tags:
+      - "Books"
+      summary: "Finds books by id"
+      operationId: "findBooksByID"
+      parameters:
+      - in: path
+        name: book_id
+        description: ID of book to return
+        required: true
+        schema:
+          type: integer
+          example: "10"
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/books'
+        '404':
+          $ref: '#/components/responses/404ApiError'
+          
+    put:
+      tags:
+      - "Books"
+      summary: "Update an existing book"
+      description: "Enter only the values that you want to update. Not all values are required."
+      operationId: "updateBook"
+      parameters:
+      - in: path
+        name: book_id
+        description: Book id to delete
+        required: true
+        schema:
+          type: integer
+          example: "10"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                  author:
+                    type: string
+                    example: Ryousuke Takeuchi
+                  genre:
+                    type: string
+                    example: Mystery
+
+
+
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/books'
+        '404':
+          $ref: '#/components/responses/404ApiError'
+        '405':
+          description: "Validation exception"
+        '500':
+          $ref: '#/components/responses/500ApiError'
+          
+    delete:
+      tags:
+      - "Books"
+      summary: "Deletes a book"
+      description: ""
+      operationId: "deleteBook"
+      parameters:
+      - in: path
+        name: book_id
+        description: Book id to delete
+        required: true
+        schema:
+          type: integer
+          example: "10"
+      responses:
+        '200':
+          description: "delete success"
+        '404':
+          $ref: '#/components/responses/404ApiError'
+        '500':
+          $ref: '#/components/responses/500ApiError'
+          
+  /book/status/{status}:
+    get:
+      tags:
+      - "Books"
+      summary: "Finds books by status"
+      description: Only use "ended" and "progress" to finds.
+      operationId: "findBooksByStatus"
+      parameters:
+      - in: path
+        name: status
+        description: Status of book to return
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - "ended"
+            - "in progress"
+            default: "ended"
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/books'
+        '404':
+          $ref: '#/components/responses/404ApiError'
+  
+  /book/{title}:
+    get:
+      tags:
+      - "Books"
+      summary: "Finds books by title"
+      operationId: "findBooksByTitle"
+      parameters:
+      - in: path
+        name: title
+        description: title of book to return
+        required: true
+        schema:
+          type: string
+          example: "Moriarty"
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/books'
+        '404':
+          $ref: '#/components/responses/404ApiError'
+          
+  /book/author:
+    get:
+      tags:
+      - "Books"
+      summary: "Finds books by author name"
+      operationId: "findBooksByAuthor"
+      parameters:
+      - in: query
+        name: author
+        description: Author value that need to be considered for filter
+        required: true
+        schema:
+          type: string
+          example: "Ryousuke Takeuchi"
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/books'
+        '404':
+          $ref: '#/components/responses/404ApiError'
+
+
+      
+components:
+  schemas:
+    books:
+      properties:
+        book_id: 
+          type: integer
+          example: 10
+        author:
+          type: string
+          example: Ryousuke Takeuchi
+        genre:
+          type: string
+          example: Mystery
+        publisher:
+          type: string
+          example: Luckpim
+        volumes:
+          type: integer
+          example: 14
+        status:
+          type: string
+          description: "book's status"
+          enum:
+          - "ended"
+          - "progress"
+        title:
+          type: string
+          example: Moriarty the Patriot
+        story:
+          type: string
+          example: "ศตวรรษที่ 19 ท่ามกลางการปฏิวัติอุตสาหกรรม เป็นช่วงเวลาที่อังกฤษกำลังขยายอำนาจอย่างยิ่งใหญ่ ทว่าในเบื้องหลังของความก้าวหน้าทางเทคโนโลยีนั้น ก็มีระบบลำดับชั้นอันเก่าแก่ที่ทำให้ขุนนางซึ่งมีจำนวนไม่ถึง 3 เปอร์เซ็นของประชากรทั้งหมดปกครองประเทศอยู่ เหล่าขุนนางที่ยึกครองสิทธิพิเศษราวกับเป็นเรื่องปกติ และชนชั้นล่างที่ต้องหาเช้ากินค่ำ ผู้คนนั้นไม่ว่าใครต่างก็ต้องใช้ชีวิตอยู่ภายในระบอบลำดับชั้นที่ถูกกำหนดตั้งแต่ถือกำเนิดมา\r\nวิลเลี่ยม เจมส์ มอริอาร์ตี้ ได้เริ่มเคลื่อนไหวเพื่อที่จะทำลายระบอบชนชั้นพิเศษที่เน่าเฟะ และสร้างประเทศในอุดมคติขึ้นมา มอริอาร์ตี้ “เจ้าแห่งอาชญากร” ที่สามารถหลอกลวงได้แม้กระทั่งเชอร์ล็อคโฮม กำลังจะเปลี่ยนโลกใบนี้ด้วยการปฏิวัติโดยอาชญากรรม"
+        link:
+          type: string
+          example: "https://www.youtube.com/embed/9du5oHqrWwA"
+
+      required:
+        - book_id
+        - author
+        - genre
+        - publisher
+        - volumes
+        - status
+        - title
+        - story
+        - link
+      
+  responses:
+    500ApiError:
+      description: This is unexpected 
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: string
+                example: 500
+              message:
+                type: string
+                example: This is an error
+    404ApiError:
+        description: This is not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: string
+                  example: 404
+                message:
+                  type: string
+                  example: Not Found
+
